@@ -6,7 +6,17 @@ import { useToast } from "@/hooks/use-toast";
 import { useComments, useAddComment, useDeleteComment } from "@/hooks/use-comments";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
-import { Comment } from "@shared/schema";
+
+// Define what a comment looks like in the API response
+interface CommentWithUser {
+  id: number;
+  userId: number;
+  mangaId: number;
+  content: string;
+  createdAt: Date;
+  username: string;
+  avatarUrl: string | null;
+}
 
 interface CommentsSectionProps {
   mangaId: number;
@@ -108,7 +118,7 @@ export function CommentsSection({ mangaId, currentUser }: CommentsSectionProps) 
         {isLoading ? (
           <div className="text-center py-4">Loading comments...</div>
         ) : comments && comments.length > 0 ? (
-          comments.map((comment: Comment) => (
+          comments.map((comment: CommentWithUser) => (
             <div key={comment.id} className="flex space-x-4 p-4 border rounded-lg">
               <Avatar>
                 <AvatarImage src={comment.avatarUrl || undefined} alt={comment.username} />
