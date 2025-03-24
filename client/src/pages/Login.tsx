@@ -51,7 +51,7 @@ export default function Login() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const response = await apiRequest("POST", "/api/auth/login", values);
+      const response = await apiRequest<{ id: number; username: string; isAdmin: boolean }>("POST", "/api/auth/login", values);
       
       // Update the auth state
       queryClient.setQueryData(["/api/auth/me"], response);

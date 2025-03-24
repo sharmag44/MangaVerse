@@ -60,7 +60,7 @@ export default function Signup() {
     try {
       // Omit confirmPassword from the request
       const { confirmPassword, ...userData } = values;
-      const response = await apiRequest("POST", "/api/auth/register", userData);
+      const response = await apiRequest<{ id: number; username: string; isAdmin: boolean }>("POST", "/api/auth/register", userData);
       
       // Update the auth state
       queryClient.setQueryData(["/api/auth/me"], response);
