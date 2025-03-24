@@ -7,8 +7,10 @@ import { useComments, useAddComment, useDeleteComment } from "@/hooks/use-commen
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 
-// Define what a comment looks like in the API response
-interface CommentWithUser {
+// Import the CommentWithUser type from our hook
+import { CommentWithUser } from "@/hooks/use-comments";
+
+// Define the props for this component
   id: number;
   userId: number;
   mangaId: number;
