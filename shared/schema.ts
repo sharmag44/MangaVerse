@@ -78,6 +78,20 @@ export const insertChapterSchema = createInsertSchema(chapters).omit({
   createdAt: true,
 });
 
+// Comments table
+export const comments = pgTable("comments", {
+  id: serial("id").primaryKey(),
+  mangaId: integer("manga_id").notNull(),
+  userId: integer("user_id").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertCommentSchema = createInsertSchema(comments).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Export types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -93,6 +107,9 @@ export type InsertManga = z.infer<typeof insertMangaSchema>;
 
 export type Chapter = typeof chapters.$inferSelect;
 export type InsertChapter = z.infer<typeof insertChapterSchema>;
+
+export type Comment = typeof comments.$inferSelect;
+export type InsertComment = z.infer<typeof insertCommentSchema>;
 
 // Extended schemas with manga data and related entities
 export const mangaWithRelationsSchema = z.object({
@@ -122,6 +139,14 @@ export const mangaWithRelationsSchema = z.object({
     chapterNumber: z.number(),
     createdAt: z.date(),
   })),
+  comments: z.array(z.object({
+    id: z.number(),
+    userId: z.number(),
+    content: z.string(),
+    createdAt: z.date(),
+    username: z.string(),
+    avatarUrl: z.string().nullable(),
+  })).optional(),
 });
 
 export type MangaWithRelations = z.infer<typeof mangaWithRelationsSchema>;

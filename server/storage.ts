@@ -4,6 +4,7 @@ import {
   categories, type Category, type InsertCategory,
   manga, type Manga, type InsertManga,
   chapters, type Chapter, type InsertChapter,
+  comments, type Comment, type InsertComment,
   type MangaWithRelations
 } from "@shared/schema";
 
@@ -45,6 +46,11 @@ export interface IStorage {
   createChapter(chapter: InsertChapter): Promise<Chapter>;
   updateChapter(id: number, chapter: Partial<InsertChapter>): Promise<Chapter | undefined>;
   deleteChapter(id: number): Promise<boolean>;
+  
+  // Comment operations
+  getCommentsByMangaId(mangaId: number): Promise<Comment[]>;
+  createComment(comment: InsertComment): Promise<Comment>;
+  deleteComment(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
