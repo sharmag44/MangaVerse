@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Button } from "@components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@components/ui/avatar";
-import { Textarea } from "@components/ui/textarea";
-import { useToast } from "@hooks/use-toast";
-import { useComments, useAddComment, useDeleteComment } from "@hooks/use-comments";
-import { Card, CardContent } from "@components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { useComments, useAddComment, useDeleteComment } from "@/hooks/use-comments";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
+import { Comment } from "@shared/schema";
 
 interface CommentsSectionProps {
   mangaId: number;
@@ -83,7 +84,7 @@ export function CommentsSection({ mangaId, currentUser }: CommentsSectionProps) 
           <Textarea 
             placeholder="Add a comment..." 
             value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCommentText(e.target.value)}
             className="min-h-24"
           />
           <div className="self-end">
