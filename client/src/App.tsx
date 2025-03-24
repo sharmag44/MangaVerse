@@ -8,6 +8,8 @@ import Home from "@/pages/Home";
 import Browse from "@/pages/Browse";
 import MangaDetail from "@/pages/MangaDetail";
 import ReadChapter from "@/pages/ReadChapter";
+import Login from "@/pages/Login";
+import Signup from "@/pages/Signup";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AddManga from "@/pages/admin/AddManga";
 import EditManga from "@/pages/admin/EditManga";
@@ -19,6 +21,10 @@ function Router() {
       <Route path="/browse" component={Browse} />
       <Route path="/manga/:id" component={MangaDetail} />
       <Route path="/manga/:mangaId/chapter/:chapterId" component={ReadChapter} />
+      
+      {/* Auth Routes */}
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={Signup} />
       
       {/* Admin Routes */}
       <Route path="/admin" component={AdminDashboard} />
