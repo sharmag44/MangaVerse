@@ -108,7 +108,7 @@ export function CommentsSection({ mangaId, currentUser }: CommentsSectionProps) 
         {isLoading ? (
           <div className="text-center py-4">Loading comments...</div>
         ) : comments && comments.length > 0 ? (
-          comments.map((comment) => (
+          comments.map((comment: Comment) => (
             <div key={comment.id} className="flex space-x-4 p-4 border rounded-lg">
               <Avatar>
                 <AvatarImage src={comment.avatarUrl || undefined} alt={comment.username} />

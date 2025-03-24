@@ -191,11 +191,24 @@ const MangaDetail = () => {
           <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-6">
               <TabsTrigger value="chapters">Chapters</TabsTrigger>
+              <TabsTrigger value="comments">
+                <div className="flex items-center gap-1">
+                  <MessageSquare className="h-4 w-4" />
+                  Comments
+                </div>
+              </TabsTrigger>
               <TabsTrigger value="related">Related Manga</TabsTrigger>
             </TabsList>
             
             <TabsContent value="chapters" className="pt-2">
               <ChapterList mangaId={manga.id} chapters={chapters} />
+            </TabsContent>
+            
+            <TabsContent value="comments" className="pt-2">
+              <CommentsSection 
+                mangaId={manga.id} 
+                currentUser={null} // This will be replaced with actual user data when authentication is implemented
+              />
             </TabsContent>
             
             <TabsContent value="related" className="pt-2">

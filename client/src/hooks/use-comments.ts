@@ -16,13 +16,7 @@ export function useAddComment() {
   
   return useMutation({
     mutationFn: async (commentData: { mangaId: number; content: string }) => {
-      return apiRequest('/api/comments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(commentData)
-      });
+      return apiRequest('POST', '/api/comments', commentData);
     },
     onSuccess: (_, variables) => {
       // Invalidate the comments query to refresh the list
