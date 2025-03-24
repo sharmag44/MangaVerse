@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,7 +31,7 @@ type NavbarProps = {
 const Navbar = ({ toggleSidebar }: NavbarProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [, navigate] = useLocation();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
