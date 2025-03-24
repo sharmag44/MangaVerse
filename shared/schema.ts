@@ -69,7 +69,11 @@ export const chapters = pgTable("chapters", {
   mangaId: integer("manga_id").notNull(),
   title: text("title").notNull(),
   chapterNumber: integer("chapter_number").notNull(),
-  pages: jsonb("pages").notNull().$type<string[]>(),
+  contentType: text("content_type").notNull(), // 'images' or 'pdf'
+  content: jsonb("content").notNull().$type<{
+    images?: string[];
+    pdfUrl?: string;
+  }>(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
