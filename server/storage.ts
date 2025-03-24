@@ -396,7 +396,14 @@ export class MemStorage implements IStorage {
     const chapter = this.chapters.get(id);
     if (!chapter) return undefined;
 
-    const updatedChapter = { ...chapter, ...chapterUpdate };
+    const updatedChapter = {
+      ...chapter,
+      ...chapterUpdate,
+      content: {
+        images: chapterUpdate.content?.images as string[] | undefined,
+        pdfUrl: chapterUpdate.content?.pdfUrl as string | undefined,
+      },
+    };
     this.chapters.set(id, updatedChapter);
     return updatedChapter;
   }
