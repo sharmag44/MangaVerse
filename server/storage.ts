@@ -11,6 +11,7 @@ export interface IStorage {
   // User operations
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByProviderId(providerId: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   
   // Genre operations
@@ -101,9 +102,18 @@ export class MemStorage implements IStorage {
     return Array.from(this.users.values()).find(user => user.username === username);
   }
   
+  async getUserByProviderId(providerId: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(user => user.providerId === providerId);
+  }
+  
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userId++;
-    const user: User = { ...insertUser, id };
+    const user: User = { 
+      ...insertUser, 
+      id,
+      provider: insertUser.provider || 'local',
+      avatarUrl: insertUser.avatarUrl || null,
+    };
     this.users.set(id, user);
     return user;
   }
