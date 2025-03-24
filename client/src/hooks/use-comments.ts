@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Comment } from "@shared/schema";
-import { apiRequest } from "@lib/queryClient";
+import { apiRequest } from "@/lib/queryClient";
 
 // Get comments for a manga
 export function useComments(mangaId: number) {
