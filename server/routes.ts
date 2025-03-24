@@ -6,7 +6,8 @@ import {
   insertGenreSchema, 
   insertCategorySchema, 
   insertMangaSchema, 
-  insertChapterSchema 
+  insertChapterSchema,
+  insertCommentSchema
 } from "@shared/schema";
 import session from "express-session";
 import { z } from "zod";
@@ -446,6 +447,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting chapter:", error);
       res.status(500).json({ message: "Failed to delete chapter" });
+    }
+  });
+  
+  // Comment Routes
+  app.get("/api/manga/:mangaId/comments", async (req, res) => {
+    try {
+      const mangaId = parseInt(req.params.mangaId);
+      if (isNaN(mangaId)) {
+        return res.status(400).json({ message: "Invalid manga ID" });
+      }
+      
+      const comments = await storage.getCommentsByMangaId(mangaId);
+      res.status(200).json(comments);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    }
+  });
+  
+  app.post("/api/comments", requireAuth, async (req, res) => {
+    try {
+      const { user } = req.session as any;
+      const commentData = insertCommentSchema.parse(req.body);
+      
+      // Validate that manga exists
+      const manga = await storage.getMangaById(commentData.mangaId);
+      if (!manga) {
+        return res.status(404).json({ message: "Manga not found" });
+      }
+      
+      // Set the user ID from the session
+      commentData.userId = user.id;
+      
+      const newComment = await storage.createComment(commentData);
+      
+      // Get user info to return with comment
+      const userInfo = await storage.getUser(user.id);
+      
+      res.status(201).json({
+        ...newComment,
+        username: userInfo?.username || 'Unknown User',
+        avatarUrl: userInfo?.avatarUrl
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid comment data", errors: error.errors });
+      }
+      console.error("Error creating comment:", error);
+      res.status(500).json({ message: "Failed to create comment" });
+    }
+  });
+  
+  app.delete("/api/comments/:id", requireAuth, async (req, res) => {
+    try {
+      const commentId = parseInt(req.params.id);
+      if (isNaN(commentId)) {
+        return res.status(400).json({ message: "Invalid comment ID" });
+      }
+      
+      // Check if user is allowed to delete the comment (either admin or comment owner)
+      const { user } = req.session as any;
+      
+      const success = await storage.deleteComment(commentId);
+      if (!success) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+      
+      res.status(200).json({ message: "Comment deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      res.status(500).json({ message: "Failed to delete comment" });
     }
   });
 

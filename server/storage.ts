@@ -59,12 +59,14 @@ export class MemStorage implements IStorage {
   private categories: Map<number, Category>;
   private manga: Map<number, Manga>;
   private chapters: Map<number, Chapter>;
+  private comments: Map<number, Comment>;
   
   private userId: number;
   private genreId: number;
   private categoryId: number;
   private mangaId: number;
   private chapterId: number;
+  private commentId: number;
   
   constructor() {
     this.users = new Map();
@@ -72,12 +74,14 @@ export class MemStorage implements IStorage {
     this.categories = new Map();
     this.manga = new Map();
     this.chapters = new Map();
+    this.comments = new Map();
     
     this.userId = 1;
     this.genreId = 1;
     this.categoryId = 1;
     this.mangaId = 1;
     this.chapterId = 1;
+    this.commentId = 1;
     
     this.initializeData();
   }
@@ -214,11 +218,28 @@ export class MemStorage implements IStorage {
       .filter(chapter => chapter.mangaId === id)
       .sort((a, b) => b.chapterNumber - a.chapterNumber);
     
+    // Get comments for this manga with username and avatar
+    const mangaComments = Array.from(this.comments.values())
+      .filter(comment => comment.mangaId === id)
+      .sort((a, b) => 
+        new Date(b.createdAt).getTime() - 
+        new Date(a.createdAt).getTime()
+      )
+      .map(comment => {
+        const user = this.users.get(comment.userId);
+        return {
+          ...comment,
+          username: user?.username || 'Unknown User',
+          avatarUrl: user?.avatarUrl
+        };
+      });
+    
     return {
       manga,
       genres: mangaGenres,
       categories: mangaCategories,
-      chapters: mangaChapters
+      chapters: mangaChapters,
+      comments: mangaComments
     };
   }
   
@@ -320,6 +341,31 @@ export class MemStorage implements IStorage {
   
   async deleteChapter(id: number): Promise<boolean> {
     return this.chapters.delete(id);
+  }
+  
+  // Comment operations
+  async getCommentsByMangaId(mangaId: number): Promise<Comment[]> {
+    return Array.from(this.comments.values())
+      .filter(comment => comment.mangaId === mangaId)
+      .sort((a, b) => 
+        new Date(b.createdAt).getTime() - 
+        new Date(a.createdAt).getTime()
+      );
+  }
+  
+  async createComment(insertComment: InsertComment): Promise<Comment> {
+    const id = this.commentId++;
+    const comment: Comment = {
+      ...insertComment,
+      id,
+      createdAt: new Date()
+    };
+    this.comments.set(id, comment);
+    return comment;
+  }
+  
+  async deleteComment(id: number): Promise<boolean> {
+    return this.comments.delete(id);
   }
 }
 

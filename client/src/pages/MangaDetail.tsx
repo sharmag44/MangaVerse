@@ -4,12 +4,13 @@ import { useMangaWithRelations } from "@/hooks/use-manga";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ChapterList from "@/components/manga/ChapterList";
+import { CommentsSection } from "@/components/manga/CommentsSection";
 import MangaCard from "@/components/manga/MangaCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AlertCircle, BookOpen, Share2, Star, Calendar, Clock } from "lucide-react";
+import { AlertCircle, BookOpen, Share2, Star, Calendar, Clock, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 
 const MangaDetail = () => {
